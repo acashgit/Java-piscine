@@ -13,6 +13,8 @@ public class Program {
         String path = "C:\\Java-pool\\mygit\\Java-pool\\Day03\\src\\ex03\\signature.txt";
         ArrayList<String> urls = new ArrayList<>();
 
+        if (args.length < 1)
+            return;
         urls = getFileUrl(path);
         threads = parserThreads(args);
         if (threads == -1){

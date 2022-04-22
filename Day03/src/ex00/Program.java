@@ -6,7 +6,7 @@ public class Program {
         Threads hen;
         int count = 0;
 
-        if (!args[0].contains("="))
+        if (args.length < 1 || !args[0].contains("="))
             return;
         for (int index = args[0].indexOf('=') + 1; index < args[0].length();index++){
             count = count * 10 + (args[0].charAt(index) - '0');
@@ -17,7 +17,7 @@ public class Program {
 
         egg.start();
         hen.start();
-        egg.join();;
+        egg.join();
         hen.join();
         for (int i = 0; i < count; i++)
             System.out.println("Human");

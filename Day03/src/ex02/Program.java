@@ -7,6 +7,8 @@ public class Program {
         int size = 0;
         int threads = 0;
         int distance;
+        if (args.length < 2)
+            return;
         size = parserSize(args);
         threads = parserThreads(args);
         if (threads > size || size == -1 || threads == -1){

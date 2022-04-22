@@ -17,10 +17,10 @@ public class Threads extends Thread{
 
     @Override
     public void run() {
-
-        while(downloader.getLastLoaded() < urls.size()){
+        while(downloader.getLastLoaded() < urls.size() - 1){
             try {
-                downloader.downloadUsingNIO(urls.get(downloader.getLastLoaded()), "file" + downloader.getLastLoaded(), loadIndex);
+                int current = downloader.getLastLoadedUp();
+                downloader.downloadUsingNIO(urls, "file" + current, loadIndex, current);
             } catch (IOException e) {
                 e.printStackTrace();
             }
