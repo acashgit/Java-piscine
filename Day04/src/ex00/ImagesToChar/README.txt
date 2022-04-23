@@ -1,6 +1,5 @@
 #Шаг-1
 	#из корневой папки задания ввести команду:
-rm -rf target
 mkdir target
 javac -d target ./src/java/edu/school21/printer/app/*.java ./src/java/edu/school21/printer/logic/*.java
 #Шаг-2
