@@ -25,10 +25,10 @@ public class Program {
         UserRepositories userRepositories = new UserRepositoryJdbcImpl(dataSource);
         Optional<Message> messageOptional = null;
         try {
-            messageOptional = messagesRepository.findById(12L);
+            messageOptional = messagesRepository.findById(3L);
             if (messageOptional.isPresent()) {
                 Message message = messageOptional.get();
-                message.setText("HEHE BOY");
+                message.setText("PEPE BOY");
                 message.setTime(null);
                 messagesRepository.update(message);
             }

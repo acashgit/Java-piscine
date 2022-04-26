@@ -64,7 +64,7 @@ public class MessagesRepositoryJdbcImpl implements MessagesRepository{
             }
             else
                 throw new NotSavedSubEntityException();
-        }catch (SQLException e){
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -72,20 +72,26 @@ public class MessagesRepositoryJdbcImpl implements MessagesRepository{
     @Override
     public void update(Message message) {
         try {
-            PreparedStatement query = null;
-            query = dataSource.getConnection().prepareStatement( "UPDATE chat.messages SET " + "authorId = ?, " + "chatroomId = ?, " +
-                    "text = ?, " + "time = ? " + " WHERE id = ?");
-            query.setLong(1, message.getUser().getId());
-            query.setLong(2, message.getChat().getId());
-            query.setString(3, message.getText());
-            try {
-                query.setTimestamp(4, Timestamp.valueOf(message.getTime()));
-            }catch (NullPointerException e){
-                query.setTimestamp(4, null);
+            if (message.getUser() != null &&
+                    userRepositories.findById(message.getUser().getId()).isPresent() &&
+                    chatRoomRepository.findById(message.getChat().getId()).isPresent()) {
+                PreparedStatement query = null;
+                query = dataSource.getConnection().prepareStatement("UPDATE chat.messages SET " + "authorId = ?, " + "chatroomId = ?, " +
+                        "text = ?, " + "time = ? " + " WHERE id = ?");
+                query.setLong(1, message.getUser().getId());
+                query.setLong(2, message.getChat().getId());
+                query.setString(3, message.getText());
+                try {
+                    query.setTimestamp(4, Timestamp.valueOf(message.getTime()));
+                } catch (NullPointerException e) {
+                    query.setTimestamp(4, null);
+                }
+                query.setLong(5, message.getId());
+                query.execute();
             }
-            query.setLong(5, message.getId());
-            query.execute();
-        } catch (SQLException e) {
+            else
+                throw new NotSavedSubEntityException();
+        } catch (NullPointerException | SQLException  | NotSavedSubEntityException e) {
             e.printStackTrace();
         }
     }
