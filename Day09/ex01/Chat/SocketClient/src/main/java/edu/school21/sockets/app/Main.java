@@ -6,6 +6,8 @@ import com.beust.jcommander.ParameterException;
 import com.beust.jcommander.Parameters;
 import edu.school21.sockets.client.Client;
 
+import java.io.IOException;
+
 @Parameters(separators = "=")
 public class Main {
 
@@ -17,7 +19,11 @@ public class Main {
         Main main = create(args);
 
         Client client = new Client();
-        client.start(host, main.port);
+        try {
+            client.start(host, main.port);
+        } catch (IOException e) {
+            System.out.println("Non block read error!");;
+        }
     }
 
     private static Main create(String[] args) {

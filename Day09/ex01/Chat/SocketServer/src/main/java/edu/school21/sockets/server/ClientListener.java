@@ -26,20 +26,8 @@ public class ClientListener extends Thread{
         String command = in.readLine();
         if (command.equals("signUp")){
             signUp();
-            exitFromServer();
         } else if (command.equals("signIn")){
-            write("Enter username:");
-            login = in.readLine();
-            for (ClientListener c1 : Server.clientListeners){
-                if (c1.login.equals(login)){
-                    errorExit("This user already in!");
-                }
-            }
-            write("Enter password:");
-            password = in.readLine();
-            if (!usersService.singIn(login, password))
-                errorExit("Wrong login or password");
-            write("Start messaging");
+            signIn();
             start();
         } else {
             errorExit("wrong command");
@@ -59,34 +47,32 @@ public class ClientListener extends Thread{
                 messageService.saveMessage(login, text);
                 for (ClientListener cl : Server.clientListeners) {
                     cl.write(login + ": " + text);
-                    cl.write(login + ": " + text);
-                    cl.write(login + ": " + text);
-                    cl.write(login + ": " + text);
                 }
             }
         }catch (IOException ignored){}
     }
 
-//    private void signIn() throws IOException {
-//        write("Enter username:");
-//        login = in.readLine();
-//        for (ClientListener c1 : Server.clientListeners){
-//            if (c1.login.equals(login)){
-//                errorExit("This user already in!");
-//            }
-//        }
-//        write("Enter password:");
-//        password = in.readLine();
-//        if (!usersService.singIn(login, password))
-//            errorExit("Wrong login or password");
-//        write("Start messaging");
-//    }
+    private void signIn() throws IOException {
+        write("Enter username:");
+        login = in.readLine();
+        for (ClientListener c1 : Server.clientListeners){
+            if (c1.login.equals(login)){
+                errorExit("This user already in!");
+            }
+        }
+        write("Enter password:");
+        password = in.readLine();
+        if (!usersService.singIn(login, password))
+            errorExit("Wrong login or password");
+        write("Start messaging");
+    }
 
     private void signUp() throws IOException {
         write("Enter username:");
         login = in.readLine();
         write("Enter password:");
         password = in.readLine();
+        start();
         if (usersService.signUp(login, password))
             write("Successful!");
         else
@@ -104,7 +90,7 @@ public class ClientListener extends Thread{
         try {
             if(!socket.isClosed()) {
                 System.err.println(errMessage);
-                write("exit");
+                write("Exit");
                 socket.close();
                 in.close();
                 out.close();
@@ -116,7 +102,7 @@ public class ClientListener extends Thread{
     private void exitFromServer() {
         try {
             if(!socket.isClosed()) {
-                write("exit");
+                write("Exit");
                 socket.close();
                 in.close();
                 out.close();
