@@ -1,0 +1,5 @@
+# java excludes ###
+out/
+target/
+.idea/
+*.iml
